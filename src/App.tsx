@@ -1,11 +1,25 @@
-import * as React from "react";
-import "./styles.css";
+import React, { useState, useEffect } from 'react'
 
-export default function App() {
+const App: React.FC = () => {
+  const [repositories, setRepositories] = useState()
+  
+  useEffect(() => {
+    async function loadData() {
+      const response = await fetch('https://api.github.com/users/euelinton/repos')
+      const data = await response.json()
+  
+      setRepositories(data)
+    }
+    loadData()
+  }, [])
+
   return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
-    </div>
-  );
+    <ul>
+      {repositories?.map(repo => (
+        <li>{repo.name}</li>
+      ))}
+    </ul>
+  )
 }
+
+export default App
